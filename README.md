@@ -59,7 +59,8 @@ final class FancyViewController: UIViewController, Presentable {
 
 extension FancyViewController {
     struct Props {
-        //some data that is prepared for showing here
+        let title: String
+        let onTap: () -> Void
     }
 }
 
@@ -71,11 +72,18 @@ extension FancyViewController {
 ```swift
 
 struct FancyVCPresenter {
-    func makeProps(
-        state: FancyFeatureState, 
-        store: Store<FancyFeatureState, Action>) -> FancyViewController.Props {
+    //prepare props for your fancy view controller
+    func makeProps(state: FancyFeatureState, 
+                   store: Store<FancyFeatureState, Action>) -> FancyViewController.Props {
         
-        //prepare props for your fancy view controller
+        Props(
+            title: "Hello"
+            onTap: {
+                store.dispatch(
+                    FancyTapAction()
+                )
+            }
+        )
     }
 }
 
@@ -85,9 +93,9 @@ struct FancyVCPresenter {
 
 ```swift
 let appState = AppState()
-let rootStore = RootStore<AppState, Action>(initialState: appState, reducer: reducer)
+let factory = StoreFactory<AppState, Action>(initialState: appState, reducer: reducer)
 
-let fancyFeatureStore = rootStore.store().proxy { $0.yourFancyFeatureSubstate }
+let fancyFeatureStore = rootStore.scopeStore { $0.yourFancyFeatureSubstate }
  
 let presenter = FancyVCPresenter()
 let viewController = FancyViewController()
@@ -202,11 +210,11 @@ It has handy extensions, like  `Equating.alwaysEqual` or `Equating.neverEqual` a
 ```swift 
 
 viewController.with(store: fancyFeatureStore,
-                        props: vcPresenter.makeProps,
-                        removeStateDuplicates: 
-                            .equal { $0.title } &&
-                            .equal { $0.subtitle }
-                        )
+                    props: vcPresenter.makeProps,
+                    removeStateDuplicates: 
+                        .equal { $0.title } &&
+                        .equal { $0.subtitle }
+                    )
             
 ```
 
