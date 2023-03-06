@@ -47,8 +47,9 @@ import PureduxUIKit
 final class FancyViewController: UIViewController, Presentable {
     var presenter: PresenterProtocol? { get set }
 
+    //update views here
     func setProps(_ props: Props) {
-        //update views here
+        
     }
     
     override func viewDidLoad() {
@@ -76,13 +77,12 @@ struct FancyVCPresenter {
     func makeProps(state: FancyFeatureState, 
                    store: Store<FancyFeatureState, Action>) -> FancyViewController.Props {
         
-        Props(
-            title: "Hello"
-            onTap: {
-                store.dispatch(
-                    FancyTapAction()
-                )
-            }
+        Props(title: "Hello"
+              onTap: {
+                  store.dispatch(
+                      FancyTapAction()
+                  )
+              }
         )
     }
 }
@@ -107,7 +107,6 @@ viewController.with(store: fancyFeatureStore,
 
 
 5. Present it immediately!
-
 
 
 ## Q&A
