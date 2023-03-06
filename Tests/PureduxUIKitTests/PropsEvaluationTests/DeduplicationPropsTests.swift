@@ -9,7 +9,7 @@ import XCTest
 @testable import PureduxUIKit
 import PureduxStore
 
-final class VCWithStoreWithDeduplicationPropsTests: XCTestCase {
+final class DeduplicationPropsTests: XCTestCase {
     let timeout: TimeInterval = 10
 
     let state = TestAppState(
@@ -46,7 +46,7 @@ final class VCWithStoreWithDeduplicationPropsTests: XCTestCase {
     }
 }
 
-extension VCWithStoreWithDeduplicationPropsTests {
+extension DeduplicationPropsTests {
     func test_WhenManyNonMutatingActionsAndNotSubscribed_ThenPropsNotEvaluated() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")

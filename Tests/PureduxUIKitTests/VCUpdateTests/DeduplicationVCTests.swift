@@ -9,7 +9,7 @@ import XCTest
 @testable import PureduxUIKit
 import PureduxStore
 
-final class VCWithStoreWithDeduplicationVCTests: XCTestCase {
+final class DeduplicationVCTests: XCTestCase {
     let timeout: TimeInterval = 10
 
     let state = TestAppState(
@@ -48,7 +48,7 @@ final class VCWithStoreWithDeduplicationVCTests: XCTestCase {
     }
 }
 
-extension VCWithStoreWithDeduplicationVCTests {
+extension DeduplicationVCTests {
     func test_WhenManyNonMutatingActionsAndNotSubscribed_ThenVCNotUpdated() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")
@@ -131,23 +131,4 @@ extension VCWithStoreWithDeduplicationVCTests {
         waitForExpectations(timeout: timeout)
     }
 }
-
-extension VCWithStoreWithDeduplicationVCTests {
-
-    static var allTests = [
-        ("test_WhenManyNonMutatingActionsAndNotSubscribed_ThenVCNotUpdated",
-         test_WhenManyNonMutatingActionsAndNotSubscribed_ThenVCNotUpdated),
-
-        ("test_WhenManyNonMutatingActions_ThenVCUpdatedOnce",
-         test_WhenManyNonMutatingActions_ThenVCUpdatedOnce),
-
-        ("test_WhenManyMutatingActions_ThenVCUpdatedForSubscribtionAndEveryDeduplicatedMutation",
-         test_WhenManyMutatingActions_ThenVCUpdatedForSubscribtionAndEveryDeduplicatedMutation),
-
-        ("test_WhenMutatingAndNonMutatingActions_ThenVCUpdatedForSubscribtionAndEveryDeduplicatedMutation",
-         test_WhenMutatingAndNonMutatingActions_ThenVCUpdatedForSubscribtionAndEveryDeduplicatedMutation),
-
-        ("test_WhenSpecificSubStateMutatingActions_ThenVCUpdatedForSubscribtionAndEveryDeduplicatedMutation",
-         test_WhenSpecificSubStateMutatingActions_ThenVCUpdatedForSubscribtionAndEveryDeduplicatedMutation)
-    ]
-}
+ 

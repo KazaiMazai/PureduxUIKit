@@ -2,14 +2,14 @@
 //  File.swift
 //  
 //
-//  Created by Sergey Kazakov on 05.06.2022.
+//  Created by Sergey Kazakov on 06.06.2022.
 //
 
 import XCTest
 @testable import PureduxUIKit
 import PureduxStore
 
-final class VCWithStoreWithoutDeduplicationPropsTests: XCTestCase {
+final class NoDeduplicationVCTests: XCTestCase {
     let timeout: TimeInterval = 4
 
     let state = TestAppState(
@@ -29,45 +29,48 @@ final class VCWithStoreWithoutDeduplicationPropsTests: XCTestCase {
         factory.rootStore()
     }()
 
-    func setupVCForTests(propsEvaluatedExpectation: XCTestExpectation) -> StubViewController {
+    func setupVCForTests(vcUpdatedExpectation: XCTestExpectation) -> StubViewController {
         let testVC = StubViewController()
 
         testVC.with(store: store,
                 props: { state, _ in
-                    propsEvaluatedExpectation.fulfill()
-            return .init(title: state.subStateWithTitle.title)
+                    .init(title: state.subStateWithTitle.title)
                 })
+
+        testVC.didSetProps = {
+            vcUpdatedExpectation.fulfill()
+        }
 
         return testVC
     }
 }
 
-extension VCWithStoreWithoutDeduplicationPropsTests {
+extension NoDeduplicationVCTests {
 
-    func test_WhenNoActionAfterSetupAndNotSubscribed_ThenPropsNotEvaluated() {
+    func test_WhenNoActionAfterSetupAndNotSubscribed_ThenVCNotUpdated() {
         let expectation = expectation(description: "propsEvaluated")
         expectation.isInverted = true
 
-        _ = setupVCForTests(propsEvaluatedExpectation: expectation)
+        _ = setupVCForTests(vcUpdatedExpectation: expectation)
 
         waitForExpectations(timeout: timeout)
     }
 
-    func test_WhenNoActionAfterSetupAndSubscribed_ThenPropsEvaluatedOnce() {
+    func test_WhenNoActionAfterSetupAndSubscribed_ThenVCUpdatedOnce() {
         let expectation = expectation(description: "propsEvaluated")
         expectation.expectedFulfillmentCount = 1
 
-        let testVC = setupVCForTests(propsEvaluatedExpectation: expectation)
+        let testVC = setupVCForTests(vcUpdatedExpectation: expectation)
         testVC.viewDidLoad()
         waitForExpectations(timeout: timeout)
     }
 
-    func test_WhenManyNonMutatingActionsAndDeduplicateNeverEqual_ThenPropsEvaluatedForSubscribtionAndEveryAction() {
+    func test_WhenManyNonMutatingActionsAndDeduplicateNeverEqual_ThenVCUpdatedForSubscribtionAndEveryAction() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")
         expectation.expectedFulfillmentCount = actionsCount + 1
 
-        let testVC = setupVCForTests(propsEvaluatedExpectation: expectation)
+        let testVC = setupVCForTests(vcUpdatedExpectation: expectation)
         testVC.viewDidLoad()
 
         (0..<actionsCount).forEach { _ in
@@ -77,12 +80,12 @@ extension VCWithStoreWithoutDeduplicationPropsTests {
         waitForExpectations(timeout: timeout)
     }
 
-    func test_WhenManyMutatingActionsAndDeduplicateNeverEqual_ThenPropsEvaluatedForSubscribtionAndEveryAction() {
+    func test_WhenManyMutatingActionsAndDeduplicateNeverEqual_ThenVCUpdatedForSubscribtionAndEveryAction() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")
         expectation.expectedFulfillmentCount = actionsCount + 1
 
-        let testVC = setupVCForTests(propsEvaluatedExpectation: expectation)
+        let testVC = setupVCForTests(vcUpdatedExpectation: expectation)
         testVC.viewDidLoad()
 
         (0..<actionsCount).forEach {
@@ -92,3 +95,4 @@ extension VCWithStoreWithoutDeduplicationPropsTests {
         waitForExpectations(timeout: timeout)
     }
 }
+ 

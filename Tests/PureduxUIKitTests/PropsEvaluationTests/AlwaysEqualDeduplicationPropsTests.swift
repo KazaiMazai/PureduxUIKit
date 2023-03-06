@@ -9,7 +9,7 @@ import XCTest
 @testable import PureduxUIKit
 import PureduxStore
 
-final class VCWithStoreWithAlwaysEqualDeduplicationVCTests: XCTestCase {
+final class AlwaysEqualDeduplicationPropsTests: XCTestCase {
     let timeout: TimeInterval = 4
 
     let state = TestAppState(
@@ -29,31 +29,29 @@ final class VCWithStoreWithAlwaysEqualDeduplicationVCTests: XCTestCase {
         factory.rootStore()
     }()
 
-    func setupVCForTests(vcUpdatedExpectation: XCTestExpectation) -> StubViewController {
+    func setupVCForTests(propsEvaluatedExpectation: XCTestExpectation) -> StubViewController {
         let testVC = StubViewController()
 
         testVC.with(
             store: store,
             props: { state, _ in
-                .init(title: state.subStateWithTitle.title)
+                propsEvaluatedExpectation.fulfill()
+                return .init(title: state.subStateWithTitle.title)
             },
             removeStateDuplicates: .alwaysEqual
         )
 
-        testVC.didSetProps = {
-            vcUpdatedExpectation.fulfill()
-        }
         return testVC
     }
 }
 
-extension VCWithStoreWithAlwaysEqualDeduplicationVCTests {
-    func test_WhenManyNonMutatingActionsAndNotSubscribedAndDeduplicationAlwaysEqual_ThenVCNotUpdated() {
+extension AlwaysEqualDeduplicationPropsTests {
+    func test_WhenManyNonMutatingActionsAndNotSubscribedAndDeduplicationAlwaysEqual_ThenPropsNotEvaluated() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")
         expectation.isInverted = true
 
-        _ = setupVCForTests(vcUpdatedExpectation: expectation)
+        _ = setupVCForTests(propsEvaluatedExpectation: expectation)
 
         (0..<actionsCount).forEach { _ in
             store.dispatch(NonMutatingStateAction())
@@ -62,12 +60,12 @@ extension VCWithStoreWithAlwaysEqualDeduplicationVCTests {
         waitForExpectations(timeout: timeout)
     }
 
-    func test_WhenManyNonMutatingActionsDeduplicationAlwaysEqual_ThenVCUpdatedOnce() {
+    func test_WhenManyNonMutatingActionsDeduplicationAlwaysEqual_ThenPropsEvaluatedOnce() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")
         expectation.expectedFulfillmentCount = 1
 
-        let testVC = setupVCForTests(vcUpdatedExpectation: expectation)
+        let testVC = setupVCForTests(propsEvaluatedExpectation: expectation)
         testVC.viewDidLoad()
 
         (0..<actionsCount).forEach { _ in
@@ -77,12 +75,12 @@ extension VCWithStoreWithAlwaysEqualDeduplicationVCTests {
         waitForExpectations(timeout: timeout)
     }
 
-    func test_WhenManyMutatingActionsAndDeduplicationAlwaysEqual_ThenVCUpdatedOnce() {
+    func test_WhenManyMutatingActionsAndDeduplicationAlwaysEqual_ThenPropsEvaluatedOnce() {
         let actionsCount = 1000
         let expectation = expectation(description: "propsEvaluated")
         expectation.expectedFulfillmentCount = 1
 
-        let testVC = setupVCForTests(vcUpdatedExpectation: expectation)
+        let testVC = setupVCForTests(propsEvaluatedExpectation: expectation)
         testVC.viewDidLoad()
 
         (0..<actionsCount).forEach {
@@ -91,18 +89,4 @@ extension VCWithStoreWithAlwaysEqualDeduplicationVCTests {
 
         waitForExpectations(timeout: timeout)
     }
-}
-
-extension VCWithStoreWithAlwaysEqualDeduplicationVCTests {
-
-    static var allTests = [
-        ("test_WhenManyNonMutatingActionsAndNotSubscribedAndDeduplicationAlwaysEqual_ThenVCNotUpdated",
-         test_WhenManyNonMutatingActionsAndNotSubscribedAndDeduplicationAlwaysEqual_ThenVCNotUpdated),
-
-        ("test_WhenManyNonMutatingActionsDeduplicationAlwaysEqual_ThenVCUpdatedOnce",
-         test_WhenManyNonMutatingActionsDeduplicationAlwaysEqual_ThenVCUpdatedOnce),
-
-        ("test_WhenManyMutatingActionsAndDeduplicationAlwaysEqual_ThenVCUpdatedOnce",
-         test_WhenManyMutatingActionsAndDeduplicationAlwaysEqual_ThenVCUpdatedOnce)
-    ]
 }
