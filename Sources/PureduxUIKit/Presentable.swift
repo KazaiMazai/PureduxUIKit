@@ -36,4 +36,19 @@ public extension Presentable {
 
         self.presenter = presenter
     }
+
+    func with<State, Action>(store: StoreObject<State, Action>,
+                             props: @escaping (State, Store<State, Action>) -> Self.Props,
+                             presentationQueue: PresentationQueue = .sharedPresentationQueue,
+                             removeStateDuplicates by: Equating<State> = .neverEqual) {
+
+        let presenter = StoreObjectPresenter(
+            viewController: self,
+            storeObject: store,
+            props: props,
+            presentationQueue: presentationQueue,
+            removeStateDuplicates: by.predicate)
+
+        self.presenter = presenter
+    }
 }
