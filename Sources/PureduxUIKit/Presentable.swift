@@ -23,9 +23,9 @@ public protocol Presentable: AnyObject {
 public extension Presentable {
 
     func with<State, Action>(store: Store<State, Action>,
-                        props: @escaping (State, Store<State, Action>) -> Self.Props,
-                        presentationQueue: PresentationQueue = .sharedPresentationQueue,
-                        removeStateDuplicates by: Equating<State> = .neverEqual) {
+                             props: @escaping (State, Store<State, Action>) -> Self.Props,
+                             presentationQueue: PresentationQueue = .sharedPresentationQueue,
+                             removeStateDuplicates by: Equating<State> = .neverEqual) {
 
         let presenter = Presenter(
             viewController: self,
