@@ -24,7 +24,7 @@ final class StoreObjectPresnterRefCycleTests: XCTestCase {
 
     func test_WhenStrongRefToVC_ThenStrongRefToChildStore() {
         weak var weakChildStore: StoreObject<(TestAppStateWithIndex, SubStateWithTitle), Action>?
-        var viewController: StubViewController?
+        var strongViewController: StubViewController?
 
         autoreleasepool {
             let strongChildStore = factory.childStore(
@@ -34,13 +34,13 @@ final class StoreObjectPresnterRefCycleTests: XCTestCase {
 
             weakChildStore = strongChildStore
 
-            let vc = StubViewController()
+            let viewController = StubViewController()
 
-            vc.with(store: strongChildStore,
+            viewController.with(store: strongChildStore,
                     props: { state, _ in .init(title: state.1.title) }
             )
 
-            viewController = vc
+            strongViewController = viewController
         }
 
         XCTAssertNotNil(weakChildStore)
@@ -48,7 +48,7 @@ final class StoreObjectPresnterRefCycleTests: XCTestCase {
 
     func test_WhenNoStrongRefToVC_ThenChildStoreIsReleased() {
         weak var weakChildStore: StoreObject<(TestAppStateWithIndex, SubStateWithTitle), Action>?
-        var viewController: StubViewController?
+        var strongViewController: StubViewController?
 
         autoreleasepool {
             let strongChildStore = factory.childStore(
@@ -58,16 +58,16 @@ final class StoreObjectPresnterRefCycleTests: XCTestCase {
 
             weakChildStore = strongChildStore
 
-            let vc = StubViewController()
+            let viewController = StubViewController()
 
-            vc.with(store: strongChildStore,
+            viewController.with(store: strongChildStore,
                     props: { state, _ in .init(title: state.1.title) }
             )
 
-            viewController = vc
+            strongViewController = viewController
         }
 
-        viewController = nil
+        strongViewController = nil
         XCTAssertNil(weakChildStore)
     }
 }
