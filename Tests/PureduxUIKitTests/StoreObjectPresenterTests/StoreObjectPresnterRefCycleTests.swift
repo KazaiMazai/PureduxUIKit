@@ -23,8 +23,8 @@ final class StoreObjectPresnterRefCycleTests: XCTestCase {
     }()
 
     func test_WhenStrongRefToVC_ThenStrongRefToChildStore() {
-        weak var weakChildStore: StoreObject<(TestAppStateWithIndex, SubStateWithTitle), Action>? = nil
-        var viewController: StubViewController? = nil
+        weak var weakChildStore: StoreObject<(TestAppStateWithIndex, SubStateWithTitle), Action>?
+        var viewController: StubViewController?
 
         autoreleasepool {
             let strongChildStore = factory.childStore(
@@ -47,8 +47,8 @@ final class StoreObjectPresnterRefCycleTests: XCTestCase {
     }
 
     func test_WhenNoStrongRefToVC_ThenChildStoreIsReleased() {
-        weak var weakChildStore: StoreObject<(TestAppStateWithIndex, SubStateWithTitle), Action>? = nil
-        var viewController: StubViewController? = nil
+        weak var weakChildStore: StoreObject<(TestAppStateWithIndex, SubStateWithTitle), Action>?
+        var viewController: StubViewController?
 
         autoreleasepool {
             let strongChildStore = factory.childStore(

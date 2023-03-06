@@ -35,7 +35,6 @@ struct Presenter<State, Action, ViewController> where ViewController: Presentabl
     }
 }
 
-
 extension Presenter: PresenterProtocol {
     func subscribeToStore() {
         store.subscribe(observer: asObserver)

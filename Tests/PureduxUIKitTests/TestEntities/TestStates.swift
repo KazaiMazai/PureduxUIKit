@@ -6,7 +6,6 @@
 //
 
 import Foundation
- 
 
 struct SubStateWithTitle {
     var title: String = ""
