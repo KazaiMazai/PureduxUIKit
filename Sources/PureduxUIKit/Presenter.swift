@@ -35,6 +35,7 @@ struct Presenter<State, Action, ViewController> where ViewController: Presentabl
     }
 }
 
+
 extension Presenter: PresenterProtocol {
     func subscribeToStore() {
         store.subscribe(observer: asObserver)
@@ -43,29 +44,30 @@ extension Presenter: PresenterProtocol {
 
 private extension Presenter {
     var asObserver: Observer<State> {
-        Observer { state, handler in
-            observe(state: state, complete: handler)
-        }
-    }
-
-    func observe(state: State, complete: @escaping (ObserverStatus) -> Void) {
-        workerQueue.async {
-            if isPrevStateEqualTo(state) {
-                complete(.active)
-                return
-            }
-
-            prevState.value = state
-            let newProps = props(state, store)
-
-            mainQueue.async { [weak viewController] in
-                guard let viewController = viewController else {
+        Observer { state, complete in
+            workerQueue.async { [weak viewController] in
+                guard let viewController else {
                     complete(.dead)
                     return
                 }
 
-                viewController.setProps(newProps)
-                complete(.active)
+                if isPrevStateEqualTo(state) {
+                    complete(.active)
+                    return
+                }
+
+                prevState.value = state
+                let newProps = props(state, store)
+
+                mainQueue.async { [weak viewController] in
+                    guard let viewController else {
+                        complete(.dead)
+                        return
+                    }
+
+                    viewController.setProps(newProps)
+                    complete(.active)
+                }
             }
         }
     }
