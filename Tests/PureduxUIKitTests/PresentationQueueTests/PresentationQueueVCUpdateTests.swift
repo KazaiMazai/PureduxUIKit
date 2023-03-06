@@ -108,20 +108,3 @@ extension PresentationQueueVCUpdateTests {
         waitForExpectations(timeout: timeout)
     }
 }
-
-extension PresentationQueueVCUpdateTests {
-
-    static var allTests = [
-        ("test_WhenMainQueueProvided_ThenVCUpdatedOnMainThread",
-         test_WhenMainQueueProvided_ThenVCUpdatedOnMainThread),
-
-        ("test_WhenSharedPresentationQueueProvided_ThenVCUpdatedOnMainThread",
-         test_WhenSharedPresentationQueueProvided_ThenVCUpdatedOnMainThread),
-
-        ("test_WhenCustomGlobalQueueProvided_ThenVCUpdatedOnMainThread",
-         test_WhenCustomGlobalQueueProvided_ThenVCUpdatedOnMainThread),
-
-        ("test_WhenMainQueueProvidedAsCustom_ThenVCUpdatedOnMainThread",
-         test_WhenMainQueueProvidedAsCustom_ThenVCUpdatedOnMainThread)
-    ]
-}

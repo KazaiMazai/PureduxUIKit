@@ -111,21 +111,3 @@ extension PresentationQueuePropsEvaluationTests {
         waitForExpectations(timeout: timeout)
     }
 }
-
-extension PresentationQueuePropsEvaluationTests {
-
-    static var allTests = [
-        ("test_WhenMainQueueProvided_ThenPropsEvaluatedOnMainThread",
-         test_WhenMainQueueProvided_ThenPropsEvaluatedOnMainThread),
-
-        ("test_WhenSharedPresentationQueueProvided_ThenPropsEvaluatedNotOnMainThread",
-         test_WhenSharedPresentationQueueProvided_ThenPropsEvaluatedNotOnMainThread),
-
-        ("test_WhenCustomGlobalQueueProvided_ThenPropsEvaluatedNotOnMainThread",
-         test_WhenCustomGlobalQueueProvided_ThenPropsEvaluatedNotOnMainThread),
-
-        ("test_WhenMainQueueProvidedAsCustom_ThenPropsEvaluatedOnMainThread",
-         test_WhenMainQueueProvidedAsCustom_ThenPropsEvaluatedOnMainThread)
-
-    ]
-}

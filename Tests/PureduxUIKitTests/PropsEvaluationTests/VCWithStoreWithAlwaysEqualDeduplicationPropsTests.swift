@@ -90,17 +90,3 @@ extension VCWithStoreWithAlwaysEqualDeduplicationPropsTests {
         waitForExpectations(timeout: timeout)
     }
 }
-
-extension VCWithStoreWithAlwaysEqualDeduplicationPropsTests {
-
-    static var allTests = [
-        ("test_WhenManyNonMutatingActionsAndNotSubscribedAndDeduplicationAlwaysEqual_ThenPropsNotEvaluated",
-         test_WhenManyNonMutatingActionsAndNotSubscribedAndDeduplicationAlwaysEqual_ThenPropsNotEvaluated),
-
-        ("test_WhenManyNonMutatingActionsDeduplicationAlwaysEqual_ThenPropsEvaluatedOnce",
-         test_WhenManyNonMutatingActionsDeduplicationAlwaysEqual_ThenPropsEvaluatedOnce),
-
-        ("test_WhenManyMutatingActionsAndDeduplicationAlwaysEqual_ThenPropsEvaluatedOnce",
-         test_WhenManyMutatingActionsAndDeduplicationAlwaysEqual_ThenPropsEvaluatedOnce)
-    ]
-}

@@ -92,21 +92,3 @@ extension VCWithStoreWithoutDeduplicationPropsTests {
         waitForExpectations(timeout: timeout)
     }
 }
-
-extension VCWithStoreWithoutDeduplicationPropsTests {
-
-    static var allTests = [
-        ("test_WhenNoActionAfterSetupAndNotSubscribed_ThenPropsNotEvaluated",
-         test_WhenNoActionAfterSetupAndNotSubscribed_ThenPropsNotEvaluated),
-
-        ("test_WhenNoActionAfterSetupAndSubscribed_ThenPropsEvaluatedOnce",
-         test_WhenNoActionAfterSetupAndSubscribed_ThenPropsEvaluatedOnce),
-
-        ("test_WhenManyNonMutatingActionsAndDeduplicateNeverEqual_ThenPropsEvaluatedForSubscribtionAndEveryAction",
-         test_WhenManyNonMutatingActionsAndDeduplicateNeverEqual_ThenPropsEvaluatedForSubscribtionAndEveryAction),
-
-        ("test_WhenManyMutatingActionsAndDeduplicateNeverEqual_ThenPropsEvaluatedForSubscribtionAndEveryAction",
-         test_WhenManyMutatingActionsAndDeduplicateNeverEqual_ThenPropsEvaluatedForSubscribtionAndEveryAction)
-
-    ]
-}
